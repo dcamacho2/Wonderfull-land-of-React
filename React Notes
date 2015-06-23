@@ -1,0 +1,39 @@
+React Notes
+
+- Uses a concept called Virtual DOM that selectively renders subtrees of nodes based upon state changes.
+
+- I React-land when we apply changes to the file, two things happen. First react runs a "diffing" algorythm that identifies what has changed. Second step is reconcilliation, where it updates the result of diff. Instead of rebuilding a project from scratch, we only adjust and update what has changed.
+
+- In React components mount to an element. When building something it is better to use Browserify or webpack and set the components up in separate files!
+
+- When using render the first argument is the component we want to render, and the second is the DOM node it should mount to.
+
+			React.render(
+				<Random />,
+				document.getElementById('mount-point')
+			);
+
+- When components are defined, we can add attributes named props to them! These props are available in in the component as 'this.props' and can be used in the render method to render dynamic data.
+
+			var Random = React.createClass({
+				render: function() {
+					return (
+						<h1>Hello, {this.props.name}! </h1>
+					);
+				}
+			});
+			React.render(
+				<Random name="Dario" />,
+				document.getElementById('mount-point')
+			);
+
+- Lifecycle Methods: (give functionality to the components)
+	componentWillMount – Invoked once, on both client & server before rendering occurs.
+	componentDidMount – Invoked once, only on the client, after rendering occurs.
+	shouldComponentUpdate – Return value determines whether component should update.
+	componentWillUnmount – Invoked prior to unmounting component.
+
+- Specs: (give functionality to the components)
+	getInitialState – Return value is the initial value for state.
+	getDefaultProps – Sets fallback props values if props aren’t supplied.
+	mixins – An array of objects, used to extend the current component’s functionality.
