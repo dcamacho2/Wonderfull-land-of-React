@@ -1,27 +1,31 @@
-var Counter = React.createClass({
-	incrementCount: function() {
-		this.setState({
-			count: this.state.count + 1
-		});
-	},
-	decrementCount: function() {
-		this.setState({
-			count: this.state.count - 1
-		});
-	},
+var ReactorTimer = React.createClass({
 	getInitialState: function() {
-		return {
-			count: 0
-		}
+		//The return object is returned is assigned to this.state
+		return {elapsed: 0};
+	},
+	componentDidMount: function() {
+		//called when component is rendered to the page
+		this.timer = setInterval(this.tick, 50);
+	},
+	componentWillMount: function() {
+		//called imediatly before the component is removed
+		clearInterval(this.timer);
+	},
+	tick: function() {
+		//based on the interval above, this function will run every 50 miliseconds
+		//calling setState causes the component to be rerendered
+		this.setState({
+			elapsed: new Date() - this.props.start
+		});
 	},
 	render: function() {
+		var elapsed = Math.round(this.state.elapsed / 100);
+		var seconds = (elapsed / 10).toFixed(1);
+
 		return (
-			<div className="counter">
-				<h1> Count: {this.state.count} </h1>
-				<button type="button" onClick={this.incrementCount}>Increment </button>
-				<button type="button" onClick={this.decrementCount}>Decrement </button>
-			</div>
+			<p>This awesome React mini-project has been running for <b> {seconds} </b> seconds</p>
 		);
 	}
 });
-React.render(<Counter />, document.getElementById('mount-point'));
+
+React.render(<ReactorTimer start={Date.now()} />, document.body);
