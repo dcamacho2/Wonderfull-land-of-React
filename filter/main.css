@@ -1,41 +1,62 @@
 * {
-  box-sizing: border-box;
+  padding:0;
+  margin:0;
+}
+
+html {
+  font:14px normal Arial, sans-serif;
+  color:#626771;
+  background-color:#fff;
 }
 
 body {
-  padding: 20px;
-  background: #2c3e50;
+  padding:60px;
+  text-align: center;
 }
 
-.filter-list {
-  margin: auto;
-  width: 300px;
-  background: #3498db;
-  border-radius: 5px;
-  border: 1px solid #196090;
+.filter-list ul li a{
+  position: absolute;
+  left: 160px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #969d9d;
 }
+
 .filter-list input {
-  width: 100%;
+  text-align: center;
+  font: inherit;
+  border: 6px solid #a3d8d6;
+  padding: 13px 12px;
+  font-size: 15px;
+  box-shadow: 0 1px 1px #DDD;
+  width: 384px;
+  outline: none;
   display: block;
-  padding: 10px;
-  border-radius: 5px 5px 0px 0px;
-  border: 0;
-  font-size: 24px;
+  color: #7B8585;
+  margin: 0 auto 20px;
 }
+
 .filter-list input:focus {
   outline: none;
 }
+
 .filter-list ul {
-  margin: 0;
-  padding: 0;
+  list-style: none;
+  display: inline-block;
+  width: 420px;
+  text-align: left;
 }
+
 .filter-list ul li {
-  list-style-type: none;
-  margin: 0;
-  color: white;
-  padding: 10px 20px;
-  border-top: 1px solid #196090;
+  display: block;
+  padding: 15px 20px;
+  background-color: #F8F8F8;
+  color: #7B8585;
+  margin-bottom: 3px;
+  position: relative;
+  transition: 0.3s;
 }
+
 .filter-list ul li:hover {
-  background: #2980b9;
+  background-color:#d8f2f1;
 }
