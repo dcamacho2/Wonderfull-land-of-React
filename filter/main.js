@@ -1,14 +1,24 @@
+var List = React.createClass({
+	render: function() {
+		return (
+			<ul>
+				{
+					this.props.items.map(function(item) {
+						return <li key={item.name}> {item.name} <a href={item.url}> {item.url} </a> </li>
+					})
+				}
+			</ul>
+		)
+	}
+});
+
 var FilteredList = React.createClass({
-	filterList: function(e) {
+	filterList: function(event) {
 		var updatedList = this.state.initialItems;
 		updatedList = updatedList.filter(function(item) {
-			return item.toLowerCase().search(
-				e.target.value.toLowerCase()
-			) !== -1;
+			return item.name.toLowerCase().search(event.target.value.toLowerCase()) !== -1;
 		});
-		this.setState({
-			items: updatedList
-		});
+		this.setState({items: updatedList});
 	},
 	getInitialState: function() {
 		return {
@@ -32,34 +42,16 @@ var FilteredList = React.createClass({
 		}
 	},
 	componentWillMount: function() {
-		this.setState({
-			items: this.state.initialItems
-		})
+		this.setState({items: this.state.initialItems})
 	},
 	render: function() {
 		return (
 			<div className="filter-list">
 				<input type="text" placeholder="Search" onChange={this.filterList} />
-				<List items={this.state.items} />
+			<List items={this.state.items} />
 			</div>
 		);
 	}
 });
-
-var List = React.createClass({
-	render: function() {
-		return (
-			<ul>
-				{
-					this.props.items.map(function(item) {
-						return <li key={item.name}> {item.name} <a href={item.url}> {item.url} </a> </li>
-					})
-				}
-			</ul>
-		)
-	}
-});
-
-
 
 React.render(<FilteredList />, document.getElementById('mount-point'));
