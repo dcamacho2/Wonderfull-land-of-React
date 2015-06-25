@@ -35,16 +35,32 @@ var ProductCategoryRow = React.createClass({
 
 var ProductRow = React.createClass({
 	//if it is not stocked then we make the name variable red using a span atribute
+	getInitialState: function() {
+		return {active: false};
+	},
+	clickHandler: function() {
+		var active = !this.state.active;
+		if (this.props.product.stocked) {
+			this.setState ({
+				active: active
+			});
+			var productPrice = parseInt(this.props.product.price);
+			this.props.addTotal(active ? productPrice : -productPrice);
+			console.log(active ? productPrice : -productPrice);
+		}
+	},
 	render: function() {
 		var name = this.props.product.stocked ?
 			this.props.product.name :
 				<span style={{color: 'red'}}>
 					{this.props.product.name}
 				</span>;
+		var classString = 'items ';
+		classString += this.state.active ? 'active' : '';
 		return (
-			<tr>
+			<tr className={classString} onClick={this.clickHandler} >
 				<td className="products">{name}</td>
-				<td className="products">{this.props.product.price}</td>
+				<td className="products">${this.props.product.price}</td>
 			</tr>
 		);
 	}
@@ -52,7 +68,6 @@ var ProductRow = React.createClass({
 
 var ProductTable = React.createClass({
 	render: function() {
-		console.log(this.props);
 		var rows = [];
 		var lastCategory = null;
 		this.props.products.forEach(function(product) {
@@ -62,19 +77,28 @@ var ProductTable = React.createClass({
 			if (product.category !== lastCategory) {
 				rows.push(<ProductCategoryRow category={product.category} key={product.category} />);
 			}
-			rows.push(<ProductRow product={product} key={product.name} />);
+			rows.push(<ProductRow product={product} key={product.name} active={product.active} addTotal={this.props.onAddTotal} />);
 			lastCategory = product.category;
 		}.bind(this));
 		return (
-			<table className="prodTable">
-				<thead>
+			<div>
+				<table className="prodTable">
+					<thead>
+						<tr>
+							<th className="infoText">Name</th>
+							<th className="infoText">Price</th>
+						</tr>
+					</thead>
+					<tbody>{rows}</tbody>
+				</table>
+				<hr />
+				<table className="prodTable">
 					<tr>
-						<th className="infoText">Name</th>
-						<th className="infoText">Price</th>
+						<td className="infoText total">Total</td>
+						<td className="infoText">${this.props.total.toFixed(2)}</td>
 					</tr>
-				</thead>
-				<tbody>{rows}</tbody>
-			</table>
+				</table>
+			</div>
 		);
 	}
 });
@@ -85,6 +109,7 @@ var SearchBar = React.createClass({
 			this.refs.filterTextInput.getDOMNode().value,
 			this.refs.inStockOnlyInput.getDOMNode().checked
 		);
+		console.log(this.refs.filterTextInput.getDOMNode().value);
 	},
 	render: function() {
 		return (
@@ -117,13 +142,19 @@ var FilterableProductTable = React.createClass({
 	getInitialState: function() {
 		return {
 			filterText: '',
-			inStockOnly: false
+			inStockOnly: false,
+			total: 0
 		};
 	},
 	handleUserInput: function(filterText, inStockOnly) {
 		this.setState({
 			filterText: filterText,
 			inStockOnly: inStockOnly
+		});
+	},
+	addTotal: function (price) {
+		this.setState({
+			total: this.state.total + price
 		});
 	},
 	render: function() {
@@ -140,6 +171,8 @@ var FilterableProductTable = React.createClass({
 						products={this.props.products}
 						filterText={this.state.filterText}
 						inStockOnly={this.state.inStockOnly}
+						total={this.state.total}
+						onAddTotal={this.addTotal}
 					/>
 				</div>
 			</div>
@@ -148,12 +181,12 @@ var FilterableProductTable = React.createClass({
 });
 
 var PRODUCTS = [
-	{category: "Software", price: "$490.99", stocked: true, name: "Obsedian"},
-	{category: "Software", price: "$90.99", stocked: true, name: "Kiwi"},
-	{category: "Software", price: "$290.99", stocked: false, name: "Mango OS"},
-	{category: "Ads", price: "$990.99", stocked: true, name: "Pushdown"},
-	{category: "Ads", price: "$399.99", stocked: false, name: "Window"},
-	{category: "Ads", price: "$599.99", stocked: true, name: "Cube/Prism"}
+	{category: "Software", price: "490.99", stocked: true, name: "Obsedian"},
+	{category: "Software", price: "90.99", stocked: true, name: "Kiwi"},
+	{category: "Software", price: "290.99", stocked: false, name: "Mango OS"},
+	{category: "Ads", price: "990.99", stocked: true, name: "Pushdown"},
+	{category: "Ads", price: "399.99", stocked: false, name: "Window"},
+	{category: "Ads", price: "599.99", stocked: true, name: "Cube/Prism"}
 ]
 
 React.render(<FilterableProductTable products={PRODUCTS} />, document.body);
